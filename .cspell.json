@@ -1,0 +1,10 @@
+{
+  "words": [
+    "prost",
+    "shuey"
+  ],
+  "ignorePaths": [
+    "node_modules",
+    "dist/**"
+  ]
+}
