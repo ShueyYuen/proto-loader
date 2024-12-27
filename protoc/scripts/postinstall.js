@@ -1,63 +1,113 @@
-const fs = require('fs');
-const path = require('path');
-const unzip = require('unzipper');
-const mkdirp = require('mkdirp');
-const protoc = require('../protoc.js');
+const fs = require('node:fs')
+const http = require('node:https')
+const path = require('node:path')
+const process = require('node:process')
+const stream = require('node:stream')
+const unzip = require('unzipper')
+const protoc = require('../')
 
-const protoVersion = '27.1';
-const downloadServer = process.env.PROTOC_DOWNLOAD_SERVER || 'https://github.com';
-const downloadUrl = `${downloadServer}/protocolbuffers/protobuf/releases/download`;
-const downloadPrefix = `${downloadUrl}/v${protoVersion}/protoc-${protoVersion}`;
-const releases = {
-  win32_x86_32: `${downloadPrefix}-win32.zip`,
-  win32_x86_64: `${downloadPrefix}-win32.zip`,
-  linux_x86_32: `${downloadPrefix}-linux-x86_32.zip`,
-  linux_x86_64: `${downloadPrefix}-linux-x86_64.zip`,
-  linux_aarch: `${downloadPrefix}-linux-aarch_64.zip`,
-  darwin_x86_64: `${downloadPrefix}-osx-x86_64.zip`,
-  darwin_aarch: `${downloadPrefix}-osx-aarch_64.zip`,
-};
+const VERSION = process.env.PROTOC_VERSION || '29.2'
+const DOWNLOAD_PREFIX
+  = process.env.PROTOC_DOWNLOAD_PREFIX
+  || 'https://github.com/protocolbuffers/protobuf/releases/download/v'
 
-const platform = process.platform;
+const PLATFORM_NAME
+  = process.platform === 'win32'
+    ? 'win'
+    : process.platform === 'darwin'
+      ? 'osx-'
+      : 'linux-'
+const ARCH
+  = process.platform === 'win32'
+    ? process.arch === 'ia32'
+      ? '32'
+      : '64'
+    : process.arch === 'ppc64'
+      ? 'ppcle_64'
+      : process.arch === 'arm64'
+        ? 'aarch_64'
+        : process.arch === 's390x'
+          ? 's390_64'
+          : process.arch === 'ia32'
+            ? 'x86_32'
+            : 'x86_64'
+const UNSUPPORTED_PLATFORMS = ['sunos', 'freebsd', 'openbsd', 'netbsd']
+const UNSUPPORTED_ARCHS = ['ppc', 's390', 'arm', 'mips', 'mipsel', 'mips64el']
 
-const isArm = process.arch.startsWith('arm');
-const arch = isArm ? 'aarch' : process.arch === 'x64' ? 'x86_64' : 'x86_32';
-const release = `${platform}_${arch}`;
-const protocDirectory = path.join(__dirname, '..', 'protoc');
+const protocDirectory = path.join(__dirname, '..')
 
-(async () => {
-  if (!releases[release]) {
-    throw new Error(
-      `Unsupported platform: ${release}. Was not able to find a proper protoc version.`
-    );
+function clearDirectory(directory) {
+  if (!fs.existsSync(directory)) {
+    return
+  }
+  fs.rmSync(directory, {
+    recursive: true,
+    force: true,
+  })
+}
+
+function httpGetBuffer(url) {
+  const result = new stream.PassThrough()
+  http
+    .get(url, (response) => {
+      if (response.statusCode === 302) {
+        return httpGetBuffer(response.headers.location).pipe(result)
+      }
+      if (response.statusCode !== 200) {
+        throw new Error(`HTTP ${response.statusCode}: ${url}`)
+      }
+      response.on('data', chunk => result.write(chunk))
+      response.on('end', () => result.end())
+    })
+    .on('error', (error) => {
+      throw error
+    })
+  return result
+}
+
+async function run() {
+  if (UNSUPPORTED_PLATFORMS.includes(process.platform)) {
+    throw new Error(`Unsupported platform: ${process.platform}`)
+  }
+  if (UNSUPPORTED_ARCHS.includes(process.arch)) {
+    throw new Error(`Unsupported architecture: ${process.arch}`)
   }
 
-  fs.rmSync(protocDirectory, { recursive: true, force: true });
+  clearDirectory(path.join(protocDirectory, 'bin'))
+  clearDirectory(path.join(protocDirectory, 'include'))
 
-  const fetch = await import('node-fetch');
-  const response = await fetch.default(releases[release]);
-  // eslint-disable-next-line new-cap
-  response.body.pipe(unzip.Parse()).on('entry', (entry) => {
-    const isFile = 'File' === entry.type;
-    const isDir = 'Directory' === entry.type;
-    const fullpath = path.join(protocDirectory, entry.path);
-    const directory = isDir ? fullpath : path.dirname(fullpath);
+  const zipFile = `protoc-${VERSION}-${PLATFORM_NAME}${ARCH}.zip`
+  const downloadUrl = `${DOWNLOAD_PREFIX}${VERSION}/${zipFile}`
+  console.time('Download')
+  console.log(`Downloading ${downloadUrl}...`)
+  const response = httpGetBuffer(downloadUrl)
+  response.pipe(unzip.Parse()).on('entry', (entry) => {
+    const isFile = entry.type === 'File'
+    const isDir = entry.type === 'Directory'
+    const filepath = path.join(protocDirectory, entry.path)
+    const directory = isDir ? filepath : path.dirname(filepath)
 
-    mkdirp(directory, (err) => {
-      if (err) {
-        throw err;
+    fs.mkdirSync(directory, { recursive: true })
+    if (!isFile) {
+      return
+    }
+    entry.pipe(fs.createWriteStream(filepath)).on('finish', () => {
+      if (protoc !== filepath) {
+        return
       }
-      if (isFile) {
-        entry.pipe(fs.createWriteStream(fullpath)).on('finish', function () {
-          if (protoc === fullpath) {
-            fs.chmod(fullpath, 0o755, function (err) {
-              if (err) {
-                throw err;
-              }
-            });
-          }
-        });
-      }
-    });
-  });
-})();
+      fs.chmodSync(filepath, 0x0755)
+    })
+  })
+  await new Promise((resolve, reject) => {
+    response.on('end', () => {
+      console.timeEnd('Download')
+      resolve()
+    })
+    response.on('error', reject)
+  })
+}
+
+run().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

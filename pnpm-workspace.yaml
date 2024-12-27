@@ -1,0 +1,5 @@
+packages:
+  - protoc
+  - '!node_modules/**'
+  - common
+  - .eslint-plugin

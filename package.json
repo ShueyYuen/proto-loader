@@ -1,0 +1,35 @@
+{
+  "name": "@shuey/proto-workspace",
+  "version": "1.0.17",
+  "description": "Protocol Buffers loader",
+  "author": "me@cofal.cn",
+  "license": "ISC",
+  "keywords": [
+    "protobuf",
+    "protocol buffers",
+    "protoc"
+  ],
+  "bin": {
+    "protoc": "./bin/protoc"
+  },
+  "engines": {
+    "node": ">=16.20.2"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "dependencies": {
+    "loader-utils": "^3.2.1",
+    "schema-utils": "^4.2.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^3.12.1",
+    "@shuey/protoc": "workspace:*",
+    "@types/google-protobuf": "^3.15.12",
+    "@types/node": "^22.10.2",
+    "@types/webpack": "^5.28.5",
+    "eslint": "^9.17.0",
+    "typescript": "^5.7.2"
+  }
+}

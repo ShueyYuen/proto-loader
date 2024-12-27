@@ -3,20 +3,14 @@
   "version": "1.0.2",
   "description": "A tool for converting proto buffers (.proto) files into javascript files usable in Closure Compiler with Closure Library.",
   "main": "index.js",
+  "bin": {
+    "protoc": "./bin/protoc"
+  },
   "scripts": {
     "postinstall": "node scripts/postinstall.js",
     "test": "node scripts/test.js"
   },
-  "bin": {
-    "protoc": "./bin/protoc"
-  },
   "dependencies": {
-    "glob": "10.4.2",
-    "mkdirp": "^0.5.6",
-    "node-fetch": "^3.2.10",
-    "rimraf": "5.0.7",
-    "unzipper": "^0.10.11",
-    "uuid": "11.0.3",
-    "vinyl": "^2.2.1"
+    "unzipper": "^0.12.3"
   }
 }
