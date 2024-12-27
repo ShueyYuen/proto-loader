@@ -1,5 +1,3 @@
 packages:
   - protoc
-  - '!node_modules/**'
-  - common
-  - .eslint-plugin
+  - protoc-gen-js

@@ -1,0 +1,16 @@
+{
+  "name": "@shuey/protoc-gen-js",
+  "version": "1.0.2",
+  "description": "A tool for converting proto buffers (.proto) files into javascript files usable in Closure Compiler with Closure Library.",
+  "main": "index.js",
+  "bin": {
+    "protoc-gen-js": "./bin/protoc-gen-js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js",
+    "test": "node scripts/test.js"
+  },
+  "dependencies": {
+    "unzipper": "^0.12.3"
+  }
+}

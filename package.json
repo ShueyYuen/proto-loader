@@ -26,6 +26,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^3.12.1",
     "@shuey/protoc": "workspace:*",
+    "@shuey/protoc-gen-js": "workspace:*",
     "@types/google-protobuf": "^3.15.12",
     "@types/node": "^22.10.2",
     "@types/webpack": "^5.28.5",
