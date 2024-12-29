@@ -4,7 +4,7 @@ const path = require("node:path");
 const process = require("node:process");
 const stream = require("node:stream");
 const unzip = require("unzipper");
-const protoc = require("../");
+const { protocPath } = require("../");
 
 const VERSION = process.env.PROTOC_VERSION || "29.2";
 const DOWNLOAD_PREFIX =
@@ -98,7 +98,7 @@ async function run() {
       return;
     }
     entry.pipe(fs.createWriteStream(filepath)).on("finish", () => {
-      if (protoc !== filepath) {
+      if (protocPath !== filepath) {
         return;
       }
       fs.chmodSync(filepath, 0x0755);

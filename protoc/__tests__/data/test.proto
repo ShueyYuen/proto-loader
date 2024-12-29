@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package com.example;
+
+message Player {
+  // in proto3, optional fields have explicit presence
+  optional string name = 1;
+  // in proto3 no specified field rule defaults to implicit presence
+  int32 id = 2;
+  // in proto3 this is packed by default
+  repeated int32 scores = 3;
+
+  enum Handed {
+    HANDED_UNSPECIFIED = 0;
+    HANDED_LEFT = 1;
+    HANDED_RIGHT = 2;
+    HANDED_AMBIDEXTROUS = 3;
+  }
+
+  // in proto3 enums are open
+  optional Handed handed = 4;
+
+  reserved "gender";
+}
