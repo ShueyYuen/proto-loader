@@ -7,8 +7,7 @@
     "protoc-gen-js": "./bin/protoc-gen-js"
   },
   "scripts": {
-    "postinstall": "node scripts/postinstall.js",
-    "test": "node scripts/test.js"
+    "postinstall": "node scripts/postinstall.js"
   },
   "dependencies": {
     "unzipper": "^0.12.3"

@@ -68,6 +68,9 @@ function httpGetBuffer(url) {
 const FILTERED_FILES = ['package.json', 'README.md', 'LICENSE.md', 'LICENSE-asserts.md']
 
 async function run() {
+  if (true) {
+    return;
+  }
   if (UNSUPPORTED_PLATFORMS.includes(process.platform)) {
     throw new Error(`Unsupported platform: ${process.platform}`)
   }

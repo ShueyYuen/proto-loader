@@ -23,11 +23,11 @@ test("will protoc fail on invalid arguments!", (done) => {
 
 test("will protoc work with a proto file!", (done) => {
   const resultDir = path.resolve(__dirname, "./pb");
-  const dataDir = path.resolve(__dirname, "./data");
-  const dataFile = path.resolve(dataDir, "test.proto");
+  const dataDir = path.resolve(__dirname, "../../examples");
+  const dataFile = path.resolve(dataDir, "simple.proto");
 
   if (fs.existsSync(resultDir)) {
-    fs.rmSync(resultDir);
+    fs.rmSync(resultDir, { recursive: true });
   }
   fs.mkdirSync(resultDir, { recursive: true });
 
@@ -42,9 +42,9 @@ test("will protoc work with a proto file!", (done) => {
         return done(err);
       }
 
-      const outputFile = path.resolve(__dirname, "./pb/test_pb.js");
+      const outputFile = path.resolve(__dirname, "./pb/simple_pb.js");
       expect(fs.existsSync(outputFile)).toBeTruthy();
-      // fs.rmSync(resultDir, { recursive: true });
+      fs.rmSync(resultDir, { recursive: true });
       done()
     }
   );

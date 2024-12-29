@@ -1,0 +1,14 @@
+{
+  "name": "@shuey/protoc-gen-ts",
+  "version": "1.0.2",
+  "description": "A tool for converting proto buffers (.proto) files into .d.ts files usable in Closure Compiler with Closure Library.",
+  "main": "index.js",
+  "bin": {
+    "protoc-gen-js": "./bin/protoc-gen-ts"
+  },
+  "scripts": {
+    "test": "node scripts/test.js"
+  },
+  "dependencies": {
+  }
+}
