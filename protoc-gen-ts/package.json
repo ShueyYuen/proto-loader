@@ -7,7 +7,6 @@
     "protoc-gen-js": "./bin/protoc-gen-ts"
   },
   "scripts": {
-    "test": "node scripts/test.js"
   },
   "dependencies": {
   }
