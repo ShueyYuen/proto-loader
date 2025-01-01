@@ -28,6 +28,12 @@ protoc --plugin=protoc-gen-ts=path/to/rust-protoc-plugin/target/release/rust-pro
 
 请将`path/to/rust-protoc-plugin`替换为您本地插件的实际路径，`output_directory`为您希望输出.d.ts文件的目录。
 
+## Develop
+
+### Requirement
+
+`cmake`
+
 ## 贡献
 
 欢迎任何形式的贡献！请提交问题或拉取请求以帮助改进此项目。

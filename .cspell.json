@@ -3,6 +3,7 @@
     "ARCHS",
     "prost",
     "protoc",
+    "protos",
     "shuey"
   ],
   "ignorePaths": [
