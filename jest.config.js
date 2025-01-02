@@ -1,7 +1,7 @@
 /** @type {import('jest').Config} */
 const config = {
   verbose: false,
-  testMatch: [ "**/__tests__/**/*.test.js" ]
-};
+  testMatch: ['**/__tests__/**/*.test.js'],
+}
 
-module.exports = config;
+module.exports = config

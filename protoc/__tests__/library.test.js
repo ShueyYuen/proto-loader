@@ -1,35 +1,35 @@
-const protoc = require("../");
-const path = require("node:path");
-const fs = require("node:fs");
+const fs = require('node:fs')
+const path = require('node:path')
+const protoc = require('../')
 
-test("is protoc installed!", (done) => {
-  protoc(["--version"], (err, stdout, stderr) => {
+it('is protoc installed!', (done) => {
+  protoc(['--version'], (err, stdout, _stderr) => {
     if (err) {
-      return done(err);
+      return done(err)
     }
-    expect(stdout).toContain("libprotoc");
-    expect(stdout).toContain(process.env.PROTOC_VERSION || "29.2");
-    done();
-  });
-});
+    expect(stdout).toContain('libprotoc')
+    expect(stdout).toContain(process.env.PROTOC_VERSION || '29.2')
+    done()
+  })
+})
 
-test("will protoc fail on invalid arguments!", (done) => {
-  protoc(["--invalid"], (err, stdout, stderr) => {
-    expect(err).not.toBeNull();
-    expect(err.code).toBe(1);
-    done();
-  });
-});
+it('will protoc fail on invalid arguments!', (done) => {
+  protoc(['--invalid'], (err, _stdout, _stderr) => {
+    expect(err).not.toBeNull()
+    expect(err.code).toBe(1)
+    done()
+  })
+})
 
-test("will protoc work with a proto file!", (done) => {
-  const resultDir = path.resolve(__dirname, "./pb");
-  const dataDir = path.resolve(__dirname, "../../examples");
-  const dataFile = path.resolve(dataDir, "simple.proto");
+it('will protoc work with a proto file!', (done) => {
+  const resultDir = path.resolve(__dirname, './pb')
+  const dataDir = path.resolve(__dirname, '../../examples')
+  const dataFile = path.resolve(dataDir, 'simple.proto')
 
   if (fs.existsSync(resultDir)) {
-    fs.rmSync(resultDir, { recursive: true });
+    fs.rmSync(resultDir, { recursive: true })
   }
-  fs.mkdirSync(resultDir, { recursive: true });
+  fs.mkdirSync(resultDir, { recursive: true })
 
   protoc(
     [
@@ -37,15 +37,15 @@ test("will protoc work with a proto file!", (done) => {
       `--proto_path=${dataDir}`,
       dataFile,
     ],
-    (err, stdout, stderr) => {
+    (err, _stdout, _stderr) => {
       if (err) {
-        return done(err);
+        return done(err)
       }
 
-      const outputFile = path.resolve(__dirname, "./pb/simple_pb.js");
-      expect(fs.existsSync(outputFile)).toBeTruthy();
-      fs.rmSync(resultDir, { recursive: true });
+      const outputFile = path.resolve(__dirname, './pb/simple_pb.js')
+      expect(fs.existsSync(outputFile)).toBeTruthy()
+      fs.rmSync(resultDir, { recursive: true })
       done()
-    }
-  );
-});
+    },
+  )
+})

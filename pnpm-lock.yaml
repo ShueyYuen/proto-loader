@@ -36,6 +36,9 @@ importers:
       eslint:
         specifier: ^9.17.0
         version: 9.17.0
+      globals:
+        specifier: ^15.14.0
+        version: 15.14.0
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.10.2)

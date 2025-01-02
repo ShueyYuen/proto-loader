@@ -7,9 +7,9 @@ const unzip = require('unzipper')
 const protocGenJS = require('../')
 
 const VERSION = process.env.PROTOC_JS_VERSION || '3.21.4'
-const DOWNLOAD_PREFIX =
-  process.env.PROTOC_JS_DOWNLOAD_PREFIX ||
-  "https://github.com/protocolbuffers/protobuf-javascript/releases/download/v";
+const DOWNLOAD_PREFIX
+  = process.env.PROTOC_JS_DOWNLOAD_PREFIX
+  || 'https://github.com/protocolbuffers/protobuf-javascript/releases/download/v'
 
 const PLATFORM_NAME
   = process.platform === 'win32'
@@ -69,7 +69,7 @@ const FILTERED_FILES = ['package.json', 'README.md', 'LICENSE.md', 'LICENSE-asse
 
 async function run() {
   if (true) {
-    return;
+    return
   }
   if (UNSUPPORTED_PLATFORMS.includes(process.platform)) {
     throw new Error(`Unsupported platform: ${process.platform}`)
@@ -80,17 +80,17 @@ async function run() {
 
   clearDirectory(path.join(protocDirectory, 'bin'))
   clearDirectory(path.join(protocDirectory, 'google'))
-  clearDirectory(path.join(protocDirectory, "google-protobuf.js"));
+  clearDirectory(path.join(protocDirectory, 'google-protobuf.js'))
 
-  const zipFile = `protobuf-javascript-${VERSION}-${PLATFORM_NAME}${ARCH}.zip`;
+  const zipFile = `protobuf-javascript-${VERSION}-${PLATFORM_NAME}${ARCH}.zip`
   const downloadUrl = `${DOWNLOAD_PREFIX}${VERSION}/${zipFile}`
   console.time('Download')
   console.log(`Downloading ${downloadUrl}...`)
   const response = httpGetBuffer(downloadUrl)
   response.pipe(unzip.Parse()).on('entry', (entry) => {
     if (FILTERED_FILES.includes(entry.path)) {
-      entry.autodrain();
-      return;
+      entry.autodrain()
+      return
     }
     const isFile = entry.type === 'File'
     const isDir = entry.type === 'Directory'
@@ -103,7 +103,7 @@ async function run() {
     }
     entry.pipe(fs.createWriteStream(filepath)).on('finish', () => {
       if (protocGenJS !== filepath) {
-        return;
+        return
       }
       fs.chmodSync(filepath, 0x0755)
     })
