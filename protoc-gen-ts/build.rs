@@ -39,14 +39,14 @@ fn main() -> Result<(), Box<dyn Error>> {
         })
         .map(|file| {
             format!(
-                "#[rustfmt::skip]\n#[path=\"./{}.rs\"]\npub mod {};",
+                "#[rustfmt::skip]\n#[path=\"./{}.rs\"]\npub mod {};\n",
                 file,
                 file.rsplit('.').next().unwrap()
             )
         })
         .collect::<Vec<_>>()
         .join("\n");
-    fs::write(&mod_file, mod_content + "\n\npub use protobuf::*;\n").unwrap();
+    fs::write(&mod_file, mod_content + "\npub use protobuf::*;\n").expect("Write mod.rs failed");
 
     println!("cargo:rerun-if-changed=build.rs");
 
