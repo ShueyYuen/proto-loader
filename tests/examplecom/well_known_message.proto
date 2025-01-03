@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package examplecom;
 
+import "google/protobuf/compiler/plugin.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/api.proto";
-import "google/protobuf/compiler/plugin.proto";
 import "google/protobuf/descriptor.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
@@ -15,17 +15,20 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/type.proto";
 import "google/protobuf/wrappers.proto";
 
-message WellKnownMessage {
-    google.protobuf.compiler.CodeGeneratorRequest my_code_generator_request = 1;
-    google.protobuf.Any my_any = 2;
-    google.protobuf.Method my_method = 3;
-    google.protobuf.GeneratedCodeInfo my_generated_code_info = 4;
-    google.protobuf.Duration my_duration = 5;
-    google.protobuf.Empty my_empty = 6;
-    google.protobuf.FieldMask my_field_mask = 7;
-    google.protobuf.SourceContext my_source_context = 8;
-    google.protobuf.Struct my_struct = 9;
-    google.protobuf.Timestamp my_timestamp = 10;
-    google.protobuf.Type my_type = 11;
-    google.protobuf.DoubleValue my_double_value = 12;
+message MySimple {
+  string my_string = 1;
+  bool my_bool = 2;
+  repeated string some_labels = 3;
+  google.protobuf.compiler.CodeGeneratorRequest some_code_generator_request = 4;
+  google.protobuf.Any some_any = 5;
+  google.protobuf.Method some_method = 6;
+  google.protobuf.GeneratedCodeInfo some_generated_code_info = 7;
+  google.protobuf.Duration some_duration = 8;
+  google.protobuf.Empty some_empty = 9;
+  google.protobuf.FieldMask some_field_mask = 10;
+  google.protobuf.SourceContext some_source_context = 11;
+  google.protobuf.Struct some_struct = 12;
+  google.protobuf.Timestamp some_timestamp = 13;
+  google.protobuf.Type some_type = 14;
+  google.protobuf.DoubleValue some_double_value = 15;
 }

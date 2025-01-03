@@ -50,8 +50,8 @@ it('multiply files', (done) => {
   protocSimple(
     [
       `--ts_out=${resultDir}`,
-      path.resolve(dataDir, "simple.proto"),
-      path.resolve(dataDir, "orphan.proto"),
+      path.resolve(dataDir, "test_messages_proto2.proto"),
+      path.resolve(dataDir, "test_messages_proto3.proto"),
     ],
     done
   );
