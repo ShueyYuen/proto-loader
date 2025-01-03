@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package examplecom;
 
-import "examples/othercom/external_enum.proto";
-import "examples/othercom/external_child_message.proto";
+import "tests/othercom/external_enum.proto";
+import "tests/othercom/external_child_message.proto";
 
 message MapMessage {
     enum InternalEnum {

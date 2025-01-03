@@ -4,7 +4,7 @@ const path = require('node:path')
 const protoc = require('../../protoc')
 
 const resultDir = path.resolve(__dirname, './pb')
-const dataDir = path.resolve(__dirname, '../../examples')
+const dataDir = path.resolve(__dirname, '../../tests')
 
 beforeAll(() => {
   cp.execSync('cargo build --release', {
